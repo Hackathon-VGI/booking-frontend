@@ -17,6 +17,7 @@ const config: Config = {
         tertiary: "#F0F2F5",
         btnBlue: "#0083C6",
         btnGreen: "#79B834",
+        label: "#3C3C43",
       },
       fontFamily: {
         sans: ['"Inter", sans-serif'],

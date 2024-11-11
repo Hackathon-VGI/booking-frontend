@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { onChangeHandler } from "@/utils/inputOnChangeHandler";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Home() {
   const [startDestination, setStartDestination] = useState("");
@@ -81,7 +82,7 @@ export default function Home() {
             </div>
           </div>
           <div className="w-[95%] bg-tertiary rounded-[10px] flex justify-around items-center h-10 px-3">
-            <label className="text-[#3C3C43] text-base" htmlFor="date">
+            <label className="text-label text-base" htmlFor="date">
               {date === "" ? "Select Date" : date}
               <input
                 onChange={onChangeHandler(setDate)}
@@ -91,8 +92,8 @@ export default function Home() {
                 className="hidden"
               />
             </label>
-            <p className="text-[#3C3C43]">-</p>
-            <label className="text-[#3C3C43] text-base" htmlFor="time">
+            <p className="text-label">-</p>
+            <label className="text-label text-base" htmlFor="time">
               {time === "" ? "Select Time" : time}
               <input
                 onChange={onChangeHandler(setTime)}
@@ -146,7 +147,31 @@ export default function Home() {
           </div>
         </div>
         <div className="flex flex-col justify-center items-center w-full gap-5">
-          <Button variant="default">Search</Button>
+          <Link
+            className="w-full"
+            href={
+              date === "" ||
+              time === "" ||
+              people === 0 ||
+              startDestination === "" ||
+              endDestination === ""
+                ? ""
+                : `/search`
+            }
+          >
+            <Button
+              disabled={
+                date === "" ||
+                time === "" ||
+                people === 0 ||
+                startDestination === "" ||
+                endDestination === ""
+              }
+              variant="default"
+            >
+              Search
+            </Button>
+          </Link>
           <Button variant={"secondary"} size={"default"}>
             My Bookings
           </Button>
