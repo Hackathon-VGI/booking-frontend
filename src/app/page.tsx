@@ -5,15 +5,18 @@ import { useState } from "react";
 import { onChangeHandler } from "@/utils/inputOnChangeHandler";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 
 export default function Home() {
   const [startDestination, setStartDestination] = useState("");
   const [endDestination, setEndDestination] = useState("");
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState<string | Date>("");
   const [time, setTime] = useState("");
   const [people, setPeople] = useState(0);
   const [babies, setBabies] = useState(0);
   const [luggage, setLuggage] = useState(0);
+  const [showCalendar, setShowCalendar] = useState(false);
 
   return (
     <div className="w-full flex justify-center items-start p-5 gap-5">
@@ -82,16 +85,31 @@ export default function Home() {
             </div>
           </div>
           <div className="w-[95%] bg-tertiary rounded-[10px] flex justify-around items-center h-10 px-3">
-            <label className="text-label text-base" htmlFor="date">
-              {date === "" ? "Select Date" : date}
-              <input
-                onChange={onChangeHandler(setDate)}
-                value={date}
-                type="date"
-                id="date"
-                className="hidden"
-              />
-            </label>
+            <div className="relative">
+              <label
+                onClick={() => setShowCalendar((prev) => !prev)}
+                className="text-label cursor-pointer text-base"
+                htmlFor="date"
+              >
+                {date === ""
+                  ? "Select Date"
+                  : date instanceof Date
+                  ? date.toLocaleDateString()
+                  : date}
+              </label>
+              {showCalendar && (
+                <Calendar
+                  className={
+                    "absolute top-10 -translate-x-[10%] left-0 z-50 min-w-[300px]"
+                  }
+                  onChange={(date) => {
+                    setDate(date as Date);
+                    setShowCalendar(false);
+                  }}
+                  value={date as Date}
+                />
+              )}
+            </div>
             <p className="text-label">-</p>
             <label className="text-label text-base" htmlFor="time">
               {time === "" ? "Select Time" : time}
