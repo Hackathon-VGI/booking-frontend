@@ -190,9 +190,11 @@ export default function Home() {
               Search
             </Button>
           </Link>
-          <Button variant={"secondary"} size={"default"}>
-            My Bookings
-          </Button>
+          <Link href="/myBookings" className="w-full">
+            <Button variant={"secondary"} size={"default"}>
+              My Bookings
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
