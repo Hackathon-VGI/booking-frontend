@@ -1,22 +1,48 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { onChangeHandler } from "@/utils/inputOnChangeHandler";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch } from "@/redux/store";
+import { fetchItems } from "@/redux/features/searchedItems/searchedItemsSlice";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
   const [startDestination, setStartDestination] = useState("");
   const [endDestination, setEndDestination] = useState("");
   const [date, setDate] = useState<string | Date>("");
-  const [time, setTime] = useState("");
+  const [time, setTime] = useState("5:00:00");
   const [people, setPeople] = useState(0);
   const [babies, setBabies] = useState(0);
   const [luggage, setLuggage] = useState(0);
   const [showCalendar, setShowCalendar] = useState(false);
+  const { searchedItems, loading } = useSelector(
+    (state: any) => state.searchResults
+  );
+
+  const handleFetchItems = () => {
+    // Dispatch the fetchItems action with the input data
+    dispatch(
+      fetchItems({
+        departure_stop: startDestination,
+        arrival_stop: endDestination,
+        departure_time: time,
+      })
+    );
+  };
+
+  useEffect(() => {
+    if (!loading && searchedItems.length > 0) {
+      router.push("/search");
+    }
+  }, [loading, searchedItems]);
 
   return (
     <div className="w-full flex justify-center items-start p-5 gap-5">
@@ -165,31 +191,19 @@ export default function Home() {
           </div>
         </div>
         <div className="flex flex-col justify-center items-center w-full gap-5">
-          <Link
-            className="w-full"
-            href={
+          <Button
+            onClick={handleFetchItems}
+            disabled={
               date === "" ||
               time === "" ||
               people === 0 ||
               startDestination === "" ||
               endDestination === ""
-                ? ""
-                : `/search`
             }
+            variant="default"
           >
-            <Button
-              disabled={
-                date === "" ||
-                time === "" ||
-                people === 0 ||
-                startDestination === "" ||
-                endDestination === ""
-              }
-              variant="default"
-            >
-              Search
-            </Button>
-          </Link>
+            {loading ? "Loading" : "Search"}
+          </Button>
           <Link href="/myBookings" className="w-full">
             <Button variant={"secondary"} size={"default"}>
               My Bookings

@@ -1,25 +1,50 @@
+"use client";
+
+import { selectItem } from "@/redux/features/searchedItems/selectedItem";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 
 type Props = {
   seats: number;
-  time: string;
-  duration: string;
+  departureTime: string;
+  arrivalTime: string;
   disabled: boolean;
   link: string;
   hover?: boolean;
+  duration: string;
+  tripId: string;
 };
 
 const SearchItem = ({
   seats,
-  time,
-  duration,
+  departureTime,
+  arrivalTime,
   disabled,
+  duration,
   link = "/search/route",
   hover = true,
+  tripId,
 }: Props) => {
+  const router = useRouter();
+  const dispatch = useDispatch();
   return (
-    <Link href={link} className="w-full">
+    <div
+      onClick={() => {
+        if (!disabled) {
+          dispatch(
+            selectItem({
+              seats,
+              departure_time: departureTime,
+              arrival_time: arrivalTime,
+              trip_id: tripId,
+            })
+          );
+          router.push(link);
+        }
+      }}
+      className="w-full"
+    >
       <div
         className={`${disabled ? "bg-[#D9D9D9] bg-opacity-10" : ""} px-5 ${
           hover
@@ -40,10 +65,12 @@ const SearchItem = ({
             </div>
             <p className="font-medium text-xs text-[#C1C1C1]">{duration}</p>
           </div>
-          <p className="text-[#979797] font-medium text-base">{time}</p>
+          <p className="text-[#979797] font-medium text-base">
+            {departureTime} - {arrivalTime}
+          </p>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 

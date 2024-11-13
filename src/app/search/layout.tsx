@@ -1,9 +1,11 @@
 "use client";
 
+import { clear } from "@/redux/features/searchedItems/searchedItemsSlice";
 import { onChangeHandler } from "@/utils/inputOnChangeHandler";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 const SearchLayout = ({
   children,
@@ -11,6 +13,7 @@ const SearchLayout = ({
   children: React.ReactNode;
 }>) => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   return (
@@ -19,7 +22,10 @@ const SearchLayout = ({
         <div className="w-full sticky top-0 bg-white shadow-searchBox py-10 px-5 flex justify-start items-center gap-10 flex-col">
           <div className="flex justify-between items-center gap-2 w-full">
             <Image
-              onClick={() => router.back()}
+              onClick={() => {
+                router.back();
+                dispatch(clear());
+              }}
               src={"/back.svg"}
               alt="back"
               width={13}

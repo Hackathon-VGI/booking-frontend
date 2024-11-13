@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import request from "@/utils/api";
 import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
 
 type formDetails = {
   name: string;
@@ -13,6 +14,7 @@ type formDetails = {
 };
 
 const BookingForm = () => {
+  const { selectedItem } = useSelector((state: any) => state.selectItem);
   const router = useRouter();
   const [formDetails, setFormDetails] = useState<formDetails>({
     name: "",
@@ -46,11 +48,11 @@ const BookingForm = () => {
       phone: formDetails.phone,
       organization_name: formDetails.org,
       number_of_passengers: 25,
-      trip_id: "123",
-      departure_date: "10-nov-2021",
-      departure_time: "10:00 AM",
+      trip_id: selectedItem.trip_id,
+      departure_date: "10-nov-2022",
+      departure_time: selectedItem.departure_time,
       arrival_date: "10-nov-2022",
-      arrival_time: "10:00 PM",
+      arrival_time: selectedItem.arrival_time,
     };
 
     try {

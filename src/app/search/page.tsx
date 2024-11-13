@@ -1,58 +1,26 @@
+"use client";
+
 import SearchItem from "@/components/searchItem/searchItem";
+import { useSelector } from "react-redux";
+import { TripDetails } from "../../redux/features/searchedItems/searchedItemsSlice";
 
 const Search = () => {
+  const { searchedItems } = useSelector((state: any) => state.searchResults);
   return (
     <div className="p-5 w-full">
       <div className="bg-white rounded-[10px] pb-5  flex justify-start items-start flex-col w-full">
-        <SearchItem
-          seats={25}
-          time="14:00 PM - 14:45 PM"
-          duration="30m"
-          link="/search/route"
-          disabled={false}
-        />
-        <SearchItem
-          seats={25}
-          time="14:00 PM - 14:45 PM"
-          duration="30m"
-          link="/search/route"
-          disabled={false}
-        />
-        <SearchItem
-          seats={25}
-          time="14:00 PM - 14:45 PM"
-          duration="30m"
-          link="/search/route"
-          disabled={false}
-        />
-        <SearchItem
-          seats={25}
-          time="14:00 PM - 14:45 PM"
-          duration="30m"
-          link="/search/route"
-          disabled={true}
-        />
-        <SearchItem
-          seats={25}
-          time="14:00 PM - 14:45 PM"
-          duration="30m"
-          link="/search/route"
-          disabled={false}
-        />
-        <SearchItem
-          seats={25}
-          time="14:00 PM - 14:45 PM"
-          duration="30m"
-          link="/search/route"
-          disabled={false}
-        />
-        <SearchItem
-          seats={25}
-          time="14:00 PM - 14:45 PM"
-          duration="30m"
-          link="/search/route"
-          disabled={true}
-        />
+        {searchedItems.map((item: TripDetails) => (
+          <SearchItem
+            key={item.departure_time + Math.random() * 100}
+            seats={25}
+            departureTime={item.departure_time}
+            arrivalTime={item.arrival_time}
+            duration={item.arrival_time}
+            link={"/search/" + item.to_stop_id}
+            disabled={false}
+            tripId={item.trip_id}
+          />
+        ))}
       </div>
     </div>
   );
