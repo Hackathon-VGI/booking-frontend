@@ -8,6 +8,8 @@ export interface TripDetails {
   departure_time: string; // HH:MM:SS in extended format
   seats: number; // Number of available seats in the trip
   trip_id: string; // Unique identifier for the trip
+  departureDate: string;
+  arrivalDate: string;
 }
 
 interface State {
@@ -21,6 +23,8 @@ const initialState: State = {
     departure_time: "",
     seats: 0,
     trip_id: "",
+    departureDate: "",
+    arrivalDate: "",
   },
   loading: false,
 };

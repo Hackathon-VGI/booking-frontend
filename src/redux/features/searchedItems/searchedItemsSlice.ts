@@ -6,26 +6,35 @@ interface SearchTripParams {
   departure_stop: string;
   arrival_stop: string;
   departure_time: string;
+  required_seats: number;
+  departure_date: string;
 }
 
 export const fetchItems = createAsyncThunk(
   "api/search-trip",
   async (
-    { departure_stop, arrival_stop, departure_time }: SearchTripParams,
+    {
+      departure_stop,
+      arrival_stop,
+      departure_time,
+      required_seats,
+      departure_date,
+    }: SearchTripParams,
     thunkApi
   ) => {
     const requestBody = {
       departure_stop,
       arrival_stop,
       departure_time,
+      required_seats,
+      departure_date,
     };
-
     const response = await fetch("http://127.0.0.1:5000/api/search-trip", {
-      method: "POST", // We're still using GET method
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(requestBody), // Send the body as JSON (non-standard for GET)
+      body: JSON.stringify(requestBody), // Ensure requestBody is an object containing your data
     });
 
     const data = await response.json();
@@ -44,11 +53,25 @@ export interface TripDetails {
 interface State {
   searchedItems: TripDetails[];
   loading: boolean;
+  tripDetails: {
+    arrivalStop: string;
+    departureStop: string;
+    departureTime: string;
+    requiredSeats: number;
+    departureDate: string;
+  };
 }
 
 const initialState: State = {
   searchedItems: [],
   loading: false,
+  tripDetails: {
+    arrivalStop: "",
+    departureStop: "",
+    departureTime: "",
+    requiredSeats: 0,
+    departureDate: "",
+  },
 };
 
 const searchItem = createSlice({
@@ -62,7 +85,14 @@ const searchItem = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchItems.fulfilled, (state, action) => {
       state.loading = false;
-      state.searchedItems.push(...action.payload);
+      state.searchedItems.push(...action.payload.valid_routes);
+      state.tripDetails = {
+        arrivalStop: action.payload.arrival_stop,
+        departureStop: action.payload.departure_stop,
+        departureTime: action.payload.departure_time,
+        requiredSeats: action.payload.required_seats,
+        departureDate: action.payload.departure_date,
+      };
     });
 
     builder.addCase(fetchItems.pending, (state, action) => {

@@ -3,7 +3,7 @@
 import { selectItem } from "@/redux/features/searchedItems/selectedItem";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 type Props = {
   seats: number;
@@ -28,16 +28,19 @@ const SearchItem = ({
 }: Props) => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const { tripDetails } = useSelector((state: any) => state.searchResults);
   return (
     <div
       onClick={() => {
         if (!disabled) {
           dispatch(
             selectItem({
-              seats,
               departure_time: departureTime,
               arrival_time: arrivalTime,
               trip_id: tripId,
+              seats: tripDetails.requiredSeats,
+              departureDate: tripDetails.departureDate,
+              arrivalDate: tripDetails.arrivalDate,
             })
           );
           router.push(link);

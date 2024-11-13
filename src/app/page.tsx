@@ -9,23 +9,43 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch } from "@/redux/store";
-import { fetchItems } from "@/redux/features/searchedItems/searchedItemsSlice";
 import { useRouter } from "next/navigation";
+import useDebounce from "@/hooks/debounce";
+import { fetchItems } from "@/redux/features/searchedItems/searchedItemsSlice";
 
 export default function Home() {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const [startDestination, setStartDestination] = useState("");
   const [endDestination, setEndDestination] = useState("");
-  const [date, setDate] = useState<string | Date>("");
-  const [time, setTime] = useState("5:00:00");
+  const [hours, setHours] = useState("");
+  const [mins, setMins] = useState("");
+  const [secs, setSecs] = useState("");
+  const [date, setDate] = useState<Date | string>("");
   const [people, setPeople] = useState(0);
   const [babies, setBabies] = useState(0);
   const [luggage, setLuggage] = useState(0);
   const [showCalendar, setShowCalendar] = useState(false);
+  const [dropDownItemsStart, setDropDownItemsStart] = useState([]);
+  const [dropDownItemsEnd, setDropDownItemsEnd] = useState([]);
   const { searchedItems, loading } = useSelector(
     (state: any) => state.searchResults
   );
+
+  const [debounceValStart, setDebounceValStart] = useState("");
+  const [debounceValEnd, setDebounceValEnd] = useState("");
+  const [startFlag, setStartFlag] = useState(false);
+  const [endFlag, setEndFlag] = useState(false);
+
+  const debounceValueStart = useDebounce(startDestination, 1000);
+  const debounceValueEnd = useDebounce(endDestination, 1000);
+
+  useEffect(() => {
+    setDebounceValStart(startDestination);
+  }, [debounceValueStart]);
+  useEffect(() => {
+    setDebounceValEnd(endDestination);
+  }, [debounceValueEnd]);
 
   const handleFetchItems = () => {
     // Dispatch the fetchItems action with the input data
@@ -33,7 +53,9 @@ export default function Home() {
       fetchItems({
         departure_stop: startDestination,
         arrival_stop: endDestination,
-        departure_time: time,
+        departure_time: `${hours}:${mins}:${secs}`,
+        required_seats: people,
+        departure_date: date.toLocaleString().split(",")[0],
       })
     );
   };
@@ -43,6 +65,40 @@ export default function Home() {
       router.push("/search");
     }
   }, [loading, searchedItems]);
+
+  useEffect(() => {
+    if (startFlag && debounceValStart !== "") {
+      fetchDropItem(debounceValStart, false);
+    }
+  }, [debounceValStart]);
+  useEffect(() => {
+    if (endFlag && debounceValEnd !== "") {
+      fetchDropItem(debounceValEnd, true);
+    }
+  }, [debounceValEnd]);
+
+  const fetchDropItem = async (searchVal: string, toFlag: boolean) => {
+    try {
+      const response = await fetch("http://127.0.0.1:5000/debounce_search", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          partial_stop: searchVal,
+        }),
+      });
+
+      const data = await response.json();
+      if (toFlag) {
+        setDropDownItemsEnd(data);
+      } else {
+        setDropDownItemsStart(data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div className="w-full flex justify-center items-start p-5 gap-5">
@@ -59,7 +115,7 @@ export default function Home() {
             </div>
             <div className="w-full justify-center flex items-center gap-3 relative">
               <span className="absolute h-[1px] pointer-events-none w-full bg-[#E6EAED] right-0 -bottom-4"></span>
-              <div className="flex justify-start w-full items-start flex-col gap-1">
+              <div className="flex relative justify-start w-full items-start flex-col gap-1">
                 <label htmlFor="from" className="text-secondary text-xs">
                   From
                 </label>
@@ -68,9 +124,29 @@ export default function Home() {
                   type="text"
                   value={startDestination}
                   placeholder="Starting Point..."
-                  onChange={onChangeHandler(setStartDestination)}
+                  onChange={(e) => {
+                    setStartFlag(true);
+                    setStartDestination(e.target.value);
+                  }}
                   className="border-none bg-transparent text-dark text-base placeholder:text-base outline-none focus:outline-none w-full"
                 />
+                <div className="absolute w-full max-h-[300px] shadow overflow-auto left-0 top-full bg-white z-[200]">
+                  {dropDownItemsStart.map((elem) => {
+                    return (
+                      <div
+                        key={elem}
+                        onClick={() => {
+                          setStartDestination(elem);
+                          setDropDownItemsStart([]);
+                          setStartFlag(false);
+                        }}
+                        className="py-2 w-full px-4 hover:bg-gray-200 cursor-pointer"
+                      >
+                        {elem}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
               <button
                 className="cursor-pointer"
@@ -85,7 +161,7 @@ export default function Home() {
               <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 rounded-full bg-white w-1 h-1"></span>
             </div>
             <div className="w-full justify-center flex items-center gap-3 relative">
-              <div className="flex justify-start w-full items-start flex-col gap-1">
+              <div className="flex relative justify-start w-full items-start flex-col gap-1">
                 <label htmlFor="to" className="text-secondary text-xs">
                   To
                 </label>
@@ -94,9 +170,29 @@ export default function Home() {
                   type="text"
                   value={endDestination}
                   placeholder="End Destination"
-                  onChange={onChangeHandler(setEndDestination)}
+                  onChange={(e) => {
+                    setEndFlag(true);
+                    setEndDestination(e.target.value);
+                  }}
                   className="border-none bg-transparent text-dark text-base placeholder:text-base outline-none focus:outline-none w-full"
                 />
+                <div className="absolute w-full max-h-[300px] shadow overflow-auto left-0 top-full bg-white z-[200]">
+                  {dropDownItemsEnd.map((elem) => {
+                    return (
+                      <div
+                        key={elem}
+                        onClick={() => {
+                          setEndDestination(elem);
+                          setDropDownItemsEnd([]);
+                          setEndFlag(false);
+                        }}
+                        className="py-2 w-full px-4 hover:bg-gray-200 cursor-pointer"
+                      >
+                        {elem}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
               <button
                 className="cursor-pointer"
@@ -137,16 +233,31 @@ export default function Home() {
               )}
             </div>
             <p className="text-label">-</p>
-            <label className="text-label text-base" htmlFor="time">
-              {time === "" ? "Select Time" : time}
+            <div className="flex justify-center items-center gap-1">
               <input
-                onChange={onChangeHandler(setTime)}
-                value={time}
-                type="time"
-                id="time"
-                className="hidden"
+                type="text"
+                value={hours}
+                placeholder="00"
+                onChange={(e) => setHours(e.target.value)}
+                className="border-b border-solid bg-transparent focus:outline-none border-b-label text-base text-label w-5"
               />
-            </label>
+              :
+              <input
+                type="text"
+                placeholder="00"
+                value={mins}
+                onChange={(e) => setMins(e.target.value)}
+                className="border-b border-solid bg-transparent focus:outline-none border-b-label text-base text-label w-5"
+              />
+              :
+              <input
+                type="text"
+                placeholder="00"
+                value={secs}
+                onChange={(e) => setSecs(e.target.value)}
+                className="border-b border-solid bg-transparent focus:outline-none border-b-label text-base text-label w-5"
+              />
+            </div>
           </div>
           <div className="w-[95%] gap-4 flex justify-between items-center">
             <div className="bg-[#F0F2F5] w-[75px] flex justify-center items-center gap-2 h-10 rounded-lg">
@@ -158,7 +269,7 @@ export default function Home() {
                 type="number"
                 value={people}
                 placeholder="0"
-                onChange={onChangeHandler(setPeople)}
+                onChange={(e) => setPeople(parseInt(e.target.value))}
                 className="border-none bg-transparent text-[#3c3c3c] text-base placeholder:text-base outline-none focus:outline-none w-6 text-center"
               />
             </div>
@@ -195,7 +306,9 @@ export default function Home() {
             onClick={handleFetchItems}
             disabled={
               date === "" ||
-              time === "" ||
+              mins === "" ||
+              hours === "" ||
+              secs === "" ||
               people === 0 ||
               startDestination === "" ||
               endDestination === ""
