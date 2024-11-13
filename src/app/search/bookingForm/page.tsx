@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import request from "@/utils/api";
+import { useRouter } from "next/navigation";
 
 type formDetails = {
   name: string;
@@ -12,6 +13,7 @@ type formDetails = {
 };
 
 const BookingForm = () => {
+  const router = useRouter();
   const [formDetails, setFormDetails] = useState<formDetails>({
     name: "",
     email: "",
@@ -25,6 +27,19 @@ const BookingForm = () => {
 
   const submitFormHandler = async (e: any) => {
     e.preventDefault();
+    if (
+      formDetails.email === undefined ||
+      formDetails.email === "" ||
+      formDetails.name === undefined ||
+      formDetails.name === "" ||
+      formDetails.phone === undefined ||
+      formDetails.phone === "" ||
+      formDetails.org === undefined ||
+      formDetails.org === ""
+    ) {
+      alert("Please enter valid details");
+      return;
+    }
     const finalDetails = {
       user_name: formDetails.name,
       email: formDetails.email,
@@ -37,8 +52,10 @@ const BookingForm = () => {
       arrival_date: "10-nov-2022",
       arrival_time: "10:00 PM",
     };
-    const res = await request.post("/api/book-trip", finalDetails);
-    if (res.status === 201) {
+
+    try {
+      const res = await request.post("/api/book-trip", finalDetails);
+      console.log(res);
       alert("Booking Confirmed");
       setFormDetails({
         name: "",
@@ -46,6 +63,9 @@ const BookingForm = () => {
         phone: "",
         org: "",
       });
+      router.push("/confirmation");
+    } catch (error) {
+      alert("Error in booking");
     }
   };
 

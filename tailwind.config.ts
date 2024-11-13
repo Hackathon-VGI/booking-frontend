@@ -18,6 +18,7 @@ const config: Config = {
         btnBlue: "#0083C6",
         btnGreen: "#79B834",
         label: "#3C3C43",
+        red: "#FF0000",
       },
       fontFamily: {
         sans: ['"Inter", sans-serif'],
