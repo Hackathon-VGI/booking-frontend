@@ -19,6 +19,7 @@ const MyBookings = () => {
           <h4 className="text-primary font-normal text-base">Old Bookings</h4>
           <BookingBox
             seats={25}
+            disabled
             timeStart="14:00 PM"
             departure="Technische Hochschule"
             destination="Klinikum"

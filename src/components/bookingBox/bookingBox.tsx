@@ -7,6 +7,7 @@ type Props = {
   timeEnd: string;
   date: string;
   seats: number;
+  disabled?: boolean;
 };
 
 const BookingBox = ({
@@ -16,9 +17,14 @@ const BookingBox = ({
   timeEnd,
   date,
   seats,
+  disabled,
 }: Props) => {
   return (
-    <div className="w-full mt-2 rounded-md bg-white shadow-searchBox py-10 px-5 flex justify-start items-center gap-5 flex-col">
+    <div
+      className={`${
+        disabled ? "opacity-50 pointer-events-none" : ""
+      } w-full mt-2 rounded-md bg-white shadow-searchBox py-10 px-5 flex justify-start items-center gap-5 flex-col`}
+    >
       <div className="flex justify-between w-full items-center gap-2">
         <p className="text-[#979797] leading-tight text-base font-normal text-left max-w-min">
           {departure}
