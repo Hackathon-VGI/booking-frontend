@@ -15,6 +15,7 @@ type formDetails = {
 
 const BookingForm = () => {
   const { selectedItem } = useSelector((state: any) => state.selectItem);
+  const { tripDetails } = useSelector((state: any) => state.searchResults);
   const router = useRouter();
   const [formDetails, setFormDetails] = useState<formDetails>({
     name: "",
@@ -47,25 +48,34 @@ const BookingForm = () => {
       email: formDetails.email,
       phone: formDetails.phone,
       organization_name: formDetails.org,
-      number_of_passengers: 25,
+      number_of_passengers: tripDetails.requiredSeats,
       trip_id: selectedItem.trip_id,
-      departure_date: "10-nov-2022",
+      departure_date: selectedItem.departureDate,
       departure_time: selectedItem.departure_time,
-      arrival_date: "10-nov-2022",
+      arrival_date: selectedItem.arrivalDate,
       arrival_time: selectedItem.arrival_time,
+      departure_stop_name: tripDetails.departureStop,
+      arrival_stop_name: tripDetails.arrivalStop,
     };
 
     try {
-      const res = await request.post("/api/book-trip", finalDetails);
-      console.log(res);
-      alert("Booking Confirmed");
-      setFormDetails({
-        name: "",
-        email: "",
-        phone: "",
-        org: "",
+      const response = await fetch("http://127.0.0.1:8000/api/book_trip", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(finalDetails),
       });
-      router.push("/confirmation");
+      if (response) {
+        alert("Booking Confirmed");
+        setFormDetails({
+          name: "",
+          email: "",
+          phone: "",
+          org: "",
+        });
+        router.push("/confirmation");
+      }
     } catch (error) {
       alert("Error in booking");
     }

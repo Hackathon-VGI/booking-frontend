@@ -13,16 +13,14 @@ const SearchLayout = ({
   const router = useRouter();
   const pathname = usePathname();
   const dispatch = useDispatch();
-  const { tripDetails, searchedItems } = useSelector(
-    (state: any) => state.searchResults
-  );
+  const { tripDetails } = useSelector((state: any) => state.searchResults);
 
   function formatDate(dateString: string): string {
     // Parse the date string into a Date object
     const date = new Date(dateString);
 
     // Extract the day, month, and year
-    const day = date.getUTCDate();
+    const day = date.getUTCDate() + 1;
     const month = date.getUTCMonth() + 1; // Months are zero-based, so we add 1
     const year = date.getUTCFullYear();
 
@@ -55,7 +53,7 @@ const SearchLayout = ({
             </div>
           </div>
           <div className="flex justify-between w-full items-center gap-2">
-            <p className="text-[#979797] leading-tight text-sm font-normal text-left max-w-[75px] w-full">
+            <p className="text-[#979797] leading-tight text-sm font-normal text-left max-w-[100px] w-full">
               {tripDetails.departureStop}
             </p>
             <div className="w-full flex justify-center items-center gap-2">
@@ -69,7 +67,7 @@ const SearchLayout = ({
                 <span className="inline-block bg-[#979797] rounded-full w-1 h-1"></span>
               </div>
             </div>
-            <p className="text-[#979797] leading-tight text-sm font-normal text-left max-w-[75px] w-full">
+            <p className="text-[#979797] leading-tight text-sm font-normal text-left max-w-[100px] w-full">
               {tripDetails.arrivalStop}
             </p>
           </div>

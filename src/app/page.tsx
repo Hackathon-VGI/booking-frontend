@@ -79,15 +79,18 @@ export default function Home() {
 
   const fetchDropItem = async (searchVal: string, toFlag: boolean) => {
     try {
-      const response = await fetch("http://127.0.0.1:5000/debounce_search", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          partial_stop: searchVal,
-        }),
-      });
+      const response = await fetch(
+        "http://127.0.0.1:8000/api/debounce_search",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            partial_stop: searchVal,
+          }),
+        }
+      );
 
       const data = await response.json();
       if (toFlag) {

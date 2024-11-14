@@ -12,7 +12,7 @@ const Search = () => {
         {searchedItems.map((item: TripDetails) => (
           <SearchItem
             key={item.departure_time + Math.random() * 100}
-            seats={25}
+            seats={item.available_seats ? item.available_seats : "35"}
             departureTime={item.departure_time}
             arrivalTime={item.arrival_time}
             duration={item.arrival_time}

@@ -1,8 +1,13 @@
+"use client";
+
 import BookingBox from "@/components/bookingBox/bookingBox";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
+import Link from "next/link";
+import { useSelector } from "react-redux";
 
 const Confirmation = () => {
+  const { selectedItem } = useSelector((state: any) => state.selectItem);
+  const { tripDetails } = useSelector((state: any) => state.searchResults);
   return (
     <div className="flex justify-center items-center w-full">
       <div className="flex justify-start max-w-[400px] p-5 items-start flex-col gap-5 w-full">
@@ -13,16 +18,19 @@ const Confirmation = () => {
           Waiting for Approval
         </h4>
         <BookingBox
-          seats={25}
-          timeStart="14:00 PM"
-          departure="Technische Hochschule"
-          destination="Klinikum"
-          timeEnd="14:45 PM"
-          date="20 Nov, 2024"
+          required_seats={tripDetails.requiredSeats}
+          availableSeats={selectedItem.seats}
+          timeStart={selectedItem.departure_time}
+          departure={tripDetails.departureStop}
+          destination={tripDetails.arrivalStop}
+          timeEnd={selectedItem.arrival_time}
+          date={selectedItem.departureDate}
         />
-        <Button className="mt-2" variant={"cancel"} size={"default"}>
-          Cancel Booking
-        </Button>
+        <Link href={"/myBookings"} className="w-full">
+          <Button className="mt-2" variant={"default"} size={"default"}>
+            Manage Bookings
+          </Button>
+        </Link>
       </div>
     </div>
   );

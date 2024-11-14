@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 
 type Props = {
-  seats: number;
+  seats: string;
   departureTime: string;
   arrivalTime: string;
   disabled: boolean;
@@ -38,9 +38,9 @@ const SearchItem = ({
               departure_time: departureTime,
               arrival_time: arrivalTime,
               trip_id: tripId,
-              seats: tripDetails.requiredSeats,
+              seats: parseInt(seats),
               departureDate: tripDetails.departureDate,
-              arrivalDate: tripDetails.arrivalDate,
+              arrivalDate: tripDetails.departureDate,
             })
           );
           router.push(link);

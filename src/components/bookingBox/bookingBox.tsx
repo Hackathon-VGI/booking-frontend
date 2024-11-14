@@ -6,8 +6,9 @@ type Props = {
   timeStart: string;
   timeEnd: string;
   date: string;
-  seats: number;
   disabled?: boolean;
+  availableSeats: number;
+  required_seats: number;
 };
 
 const BookingBox = ({
@@ -16,8 +17,9 @@ const BookingBox = ({
   timeStart,
   timeEnd,
   date,
-  seats,
   disabled,
+  availableSeats,
+  required_seats,
 }: Props) => {
   return (
     <div
@@ -46,14 +48,14 @@ const BookingBox = ({
       </div>
       <div className="flex justify-center items-center gap-2 bg-btnBlue rounded-[10px] p-3">
         <Image src={"/booking-bus.svg"} alt="bus" width={30} height={30} />
-        <p className="font-medium text-base text-white">30</p>
+        <p className="font-medium text-base text-white">{availableSeats}</p>
       </div>
       <p className="text-lg font-medium text-[#979797]">
         {timeStart} - {timeEnd} | {date}
       </p>
       <div className="flex justify-center items-center gap-2">
         <Image src={"/people.svg"} alt="user" width={25} height={25} />
-        <p className="text-label text-base">{seats}</p>
+        <p className="text-label text-base">{required_seats}</p>
       </div>
     </div>
   );

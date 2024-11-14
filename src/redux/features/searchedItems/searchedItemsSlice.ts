@@ -1,5 +1,6 @@
 // slices/userSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import request from "../../../utils/api";
 
 // api call
 interface SearchTripParams {
@@ -29,12 +30,12 @@ export const fetchItems = createAsyncThunk(
       required_seats,
       departure_date,
     };
-    const response = await fetch("http://127.0.0.1:5000/api/search-trip", {
+    const response = await fetch("http://127.0.0.1:8000/api/search_trips", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(requestBody), // Ensure requestBody is an object containing your data
+      body: JSON.stringify(requestBody),
     });
 
     const data = await response.json();
@@ -48,6 +49,7 @@ export interface TripDetails {
   from_stop_id: number; // ID of the starting stop
   to_stop_id: number; // ID of the destination stop
   trip_id: string; // Unique identifier for the trip
+  available_seats: string; // Number of available
 }
 
 interface State {
