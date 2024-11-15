@@ -128,6 +128,9 @@ export default function Home() {
                   value={startDestination}
                   placeholder="Starting Point..."
                   onChange={(e) => {
+                    if (e.target.value === "") {
+                      setDropDownItemsStart([]);
+                    }
                     setStartFlag(true);
                     setStartDestination(e.target.value);
                   }}
@@ -153,7 +156,10 @@ export default function Home() {
               </div>
               <button
                 className="cursor-pointer"
-                onClick={() => setStartDestination("")}
+                onClick={() => {
+                  setStartDestination("");
+                  setDropDownItemsStart([]);
+                }}
               >
                 <Image alt="remove" width={12} height={12} src="/cross.svg" />
               </button>
@@ -174,6 +180,9 @@ export default function Home() {
                   value={endDestination}
                   placeholder="End Destination"
                   onChange={(e) => {
+                    if (e.target.value === "") {
+                      setDropDownItemsEnd([]);
+                    }
                     setEndFlag(true);
                     setEndDestination(e.target.value);
                   }}
@@ -203,6 +212,8 @@ export default function Home() {
                   let tempEnd = endDestination;
                   setEndDestination(startDestination);
                   setStartDestination(tempEnd);
+                  setDropDownItemsEnd([]);
+                  setDropDownItemsStart([]);
                 }}
               >
                 <Image alt="switch" width={16} height={16} src="/switch.svg" />
