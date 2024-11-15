@@ -1,7 +1,9 @@
 "use client";
 
 import BookingBox from "@/components/bookingBox/bookingBox";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 
 const MyBookings = () => {
   const [oldBookings, setOldBookings] = useState<any[]>([]);
@@ -55,7 +57,16 @@ const MyBookings = () => {
 
   return (
     <div className="w-full flex py-10 justify-center items-start gap-5">
-      <div className="w-full flex relative px-5 justify-start items-start flex-col gap-6 max-w-[400px]">
+      <div className="w-full flex relative px-5 justify-start pt-4 items-start flex-col gap-6 max-w-[400px]">
+        <Link href="/">
+          <Image
+            src={"/back.svg"}
+            alt="back"
+            width={13}
+            height={23}
+            className="cursor-pointer absolute -top-2 left-4"
+          />
+        </Link>
         <div className="flex justify-start items-start flex-col w-full">
           <h4 className="text-primary font-normal text-base">New Bookings</h4>
           {newBookings.map((booking) => (

@@ -32,7 +32,7 @@ const SearchLayout = ({
   return (
     <div className="w-full flex justify-center items-start gap-5">
       <div className="w-full flex relative justify-start items-start flex-col gap-6 max-w-[400px]">
-        <div className="w-full sticky top-0 bg-white shadow-searchBox py-10 px-5 flex justify-start items-center gap-10 flex-col">
+        <div className="w-full sticky top-0 z-[200] bg-white shadow-searchBox py-10 px-5 flex justify-start items-center gap-10 flex-col">
           <div className="flex justify-between items-center gap-2 w-full">
             <Image
               onClick={() => {

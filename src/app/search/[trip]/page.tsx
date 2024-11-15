@@ -32,7 +32,7 @@ const Route = () => {
       <div className="w-full relative aspect-square">
         <Image src={"/map.png"} alt="user" layout="fill" objectFit="cover" />
       </div>
-      <Link href="/search/bookingForm" className="w-full">
+      <Link href="/search/bookingForm" className="w-full mb-5">
         <Button variant={"default"} size={"default"}>
           Next
         </Button>
