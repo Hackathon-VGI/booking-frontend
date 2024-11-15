@@ -9,6 +9,7 @@ type Props = {
   disabled?: boolean;
   availableSeats: number;
   required_seats: number;
+  status?: string;
 };
 
 const BookingBox = ({
@@ -20,12 +21,19 @@ const BookingBox = ({
   disabled,
   availableSeats,
   required_seats,
+  status,
 }: Props) => {
+  const STATUS = {
+    pending: "Pending",
+    cancelled: "Reject",
+    completed: "Approve",
+  };
+
   return (
     <div
       className={`${
         disabled ? "opacity-50 pointer-events-none" : ""
-      } w-full mt-2 rounded-md bg-white shadow-searchBox py-10 px-5 flex justify-start items-center gap-5 flex-col`}
+      } w-full mt-2 rounded-md relative bg-white shadow-searchBox pb-12 pt-10 px-5 flex justify-start items-center gap-5 flex-col`}
     >
       <div className="flex justify-between w-full items-center gap-2">
         <p className="text-[#979797] leading-tight text-base font-normal text-left max-w-min">
@@ -56,6 +64,15 @@ const BookingBox = ({
       <div className="flex justify-center items-center gap-2">
         <Image src={"/people.svg"} alt="user" width={25} height={25} />
         <p className="text-label text-base">{required_seats}</p>
+      </div>
+      <div
+        className={`${
+          status === STATUS.pending ? "bg-[#979797] text-white" : ""
+        } ${status === STATUS.completed ? "bg-btnGreen text-white" : ""} ${
+          status === STATUS.cancelled ? "bg-red text-white" : ""
+        } rounded-[10px] px-2 h-[35px] grid place-content-center absolute right-3 bottom-3 pointer-events-none text-sm`}
+      >
+        {status}
       </div>
     </div>
   );

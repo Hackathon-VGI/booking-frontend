@@ -68,6 +68,7 @@ const MyBookings = () => {
               date={booking.departure_date}
               availableSeats={booking.number_of_passengers}
               required_seats={booking.number_of_passengers}
+              status={booking.booking_status}
             />
           ))}
         </div>
@@ -83,6 +84,8 @@ const MyBookings = () => {
               date={booking.departure_date}
               availableSeats={booking.number_of_passengers}
               required_seats={booking.number_of_passengers}
+              disabled
+              status={booking.booking_status}
             />
           ))}
         </div>

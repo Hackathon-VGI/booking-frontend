@@ -5,6 +5,7 @@ import { useState } from "react";
 import request from "@/utils/api";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
+import { toast } from "sonner";
 
 type formDetails = {
   name: string;
@@ -67,17 +68,21 @@ const BookingForm = () => {
         body: JSON.stringify(finalDetails),
       });
       if (response) {
-        alert("Booking Confirmed");
         setFormDetails({
           name: "",
           email: "",
           phone: "",
           org: "",
         });
-        router.push("/confirmation");
+        toast.message("Booking Created", {
+          description: `${tripDetails.departureStop} - ${tripDetails.arrivalStop}`,
+        });
+        setTimeout(() => {
+          router.push("/confirmation");
+        }, 1000);
       }
     } catch (error) {
-      alert("Error in booking");
+      toast.error("Error Creating Booking");
     }
   };
 
