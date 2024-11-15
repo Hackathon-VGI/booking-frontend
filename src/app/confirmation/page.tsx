@@ -25,6 +25,7 @@ const Confirmation = () => {
           destination={tripDetails.arrivalStop}
           timeEnd={selectedItem.arrival_time}
           date={selectedItem.departureDate}
+          bus_number={selectedItem.bus_number}
         />
         <Link href={"/myBookings"} className="w-full">
           <Button className="mt-2" variant={"default"} size={"default"}>

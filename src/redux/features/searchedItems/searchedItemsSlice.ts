@@ -50,6 +50,7 @@ export interface TripDetails {
   to_stop_id: number; // ID of the destination stop
   trip_id: string; // Unique identifier for the trip
   available_seats: string; // Number of available
+  bus_number: string; // Bus number
 }
 
 interface State {

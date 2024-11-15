@@ -14,10 +14,12 @@ type Props = {
   hover?: boolean;
   duration: string;
   tripId: string;
+  busNumber: string;
 };
 
 const SearchItem = ({
   seats,
+  busNumber,
   departureTime,
   arrivalTime,
   disabled,
@@ -41,6 +43,7 @@ const SearchItem = ({
               seats: parseInt(seats),
               departureDate: tripDetails.departureDate,
               arrivalDate: tripDetails.departureDate,
+              bus_number: busNumber,
             })
           );
           router.push(link);
@@ -58,9 +61,6 @@ const SearchItem = ({
         <div className="flex border-b border-solid gap-4 border-[#7B4EB4] justify-start items-start flex-col w-full py-5">
           <div className="flex justify-between w-full items-center gap-2">
             <div className="flex justify-center items-center gap-2">
-              <p className="text-sm font-normal text-[#c1c1c1]">
-                Available Seats:
-              </p>
               <div className="flex justify-center items-center gap-1 bg-btnBlue rounded-[10px] p-2">
                 <Image
                   src={"/booking-bus.svg"}
@@ -68,11 +68,14 @@ const SearchItem = ({
                   width={20}
                   height={20}
                 />
-                <p className="font-medium text-sm text-white">{seats}</p>
+                <p className="font-medium text-sm text-white">{busNumber}</p>
               </div>
             </div>
             <p className="font-medium text-xs text-[#C1C1C1]">{duration}</p>
           </div>
+          <p className="text-[#979797] font-medium text-base">
+            Available Seats: {seats}
+          </p>
           <p className="text-[#979797] font-medium text-base">
             {departureTime} - {arrivalTime}
           </p>

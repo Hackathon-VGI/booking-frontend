@@ -10,6 +10,7 @@ type Props = {
   availableSeats: number;
   required_seats: number;
   status?: string;
+  bus_number: string;
 };
 
 const BookingBox = ({
@@ -22,6 +23,7 @@ const BookingBox = ({
   availableSeats,
   required_seats,
   status,
+  bus_number,
 }: Props) => {
   const STATUS = {
     pending: "Pending",
@@ -56,7 +58,7 @@ const BookingBox = ({
       </div>
       <div className="flex justify-center items-center gap-2 bg-btnBlue rounded-[10px] p-3">
         <Image src={"/booking-bus.svg"} alt="bus" width={30} height={30} />
-        <p className="font-medium text-base text-white">{availableSeats}</p>
+        <p className="font-medium text-base text-white">{bus_number}</p>
       </div>
       <p className="text-lg font-medium text-[#979797]">
         {timeStart} - {timeEnd} | {date}

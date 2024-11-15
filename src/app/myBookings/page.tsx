@@ -10,6 +10,14 @@ const MyBookings = () => {
   const [newBookings, setNewBookings] = useState<any[]>([]);
   const isFirstRender = useRef(true);
 
+  const sortedBookings = (booking: any) => {
+    return booking.sort((a: any, b: any) => {
+      const dateTimeA = new Date(`${a.departure_date}T${a.departure_time}`);
+      const dateTimeB = new Date(`${b.departure_date}T${b.departure_time}`);
+      return dateTimeA.getTime() - dateTimeB.getTime(); // Ascending order
+    });
+  };
+
   useEffect(() => {
     if (isFirstRender.current) {
       fetchData();
@@ -20,7 +28,7 @@ const MyBookings = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/api/get_all_booking/test2@gmail.com",
+        "http://127.0.0.1:8000/api/get_all_booking/test3@gmail.com",
         {
           method: "GET",
           headers: {
@@ -69,36 +77,50 @@ const MyBookings = () => {
         </Link>
         <div className="flex justify-start items-start flex-col w-full">
           <h4 className="text-primary font-normal text-base">New Bookings</h4>
-          {newBookings.map((booking) => (
-            <BookingBox
-              key={booking.bus_number + Math.random()}
-              timeStart={booking.departure_time}
-              departure={booking.departure_stop_name}
-              destination={booking.arrival_stop_name}
-              timeEnd={booking.arrival_time}
-              date={booking.departure_date}
-              availableSeats={booking.number_of_passengers}
-              required_seats={booking.number_of_passengers}
-              status={booking.booking_status}
-            />
-          ))}
+          {newBookings.length > 0 ? (
+            sortedBookings(newBookings).map((booking: any) => (
+              <BookingBox
+                key={booking.bus_number + Math.random()}
+                timeStart={booking.departure_time}
+                departure={booking.departure_stop_name}
+                destination={booking.arrival_stop_name}
+                timeEnd={booking.arrival_time}
+                date={booking.departure_date}
+                availableSeats={booking.number_of_passengers}
+                required_seats={booking.number_of_passengers}
+                status={booking.booking_status}
+                bus_number={booking.bus_number}
+              />
+            ))
+          ) : (
+            <h2 className="text-xl font-bold w-full text-center mt-2">
+              No Bookings Found 🥲
+            </h2>
+          )}
         </div>
         <div className="flex justify-start items-start flex-col w-full">
           <h4 className="text-primary font-normal text-base">Old Bookings</h4>
-          {oldBookings.map((booking) => (
-            <BookingBox
-              key={booking.bus_number + Math.random()}
-              timeStart={booking.departure_time}
-              departure={booking.departure_stop_name}
-              destination={booking.arrival_stop_name}
-              timeEnd={booking.arrival_time}
-              date={booking.departure_date}
-              availableSeats={booking.number_of_passengers}
-              required_seats={booking.number_of_passengers}
-              disabled
-              status={booking.booking_status}
-            />
-          ))}
+          {oldBookings.length > 0 ? (
+            sortedBookings(oldBookings).map((booking: any) => (
+              <BookingBox
+                key={booking.bus_number + Math.random()}
+                timeStart={booking.departure_time}
+                departure={booking.departure_stop_name}
+                destination={booking.arrival_stop_name}
+                timeEnd={booking.arrival_time}
+                date={booking.departure_date}
+                availableSeats={booking.number_of_passengers}
+                required_seats={booking.number_of_passengers}
+                disabled
+                status={booking.booking_status}
+                bus_number={booking.bus_number}
+              />
+            ))
+          ) : (
+            <h2 className="text-xl font-bold w-full text-center mt-2">
+              No Bookings Found 🥲
+            </h2>
+          )}
         </div>
       </div>
     </div>

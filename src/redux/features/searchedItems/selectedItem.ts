@@ -10,6 +10,7 @@ export interface TripDetails {
   trip_id: string; // Unique identifier for the trip
   departureDate: string;
   arrivalDate: string;
+  bus_number: string; // Bus number
 }
 
 interface State {
@@ -25,6 +26,7 @@ const initialState: State = {
     trip_id: "",
     departureDate: "",
     arrivalDate: "",
+    bus_number: "",
   },
   loading: false,
 };

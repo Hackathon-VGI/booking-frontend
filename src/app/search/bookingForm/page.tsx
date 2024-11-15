@@ -57,6 +57,7 @@ const BookingForm = () => {
       arrival_time: selectedItem.arrival_time,
       departure_stop_name: tripDetails.departureStop,
       arrival_stop_name: tripDetails.arrivalStop,
+      bus_number: selectedItem.bus_number,
     };
 
     try {

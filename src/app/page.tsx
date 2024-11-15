@@ -12,6 +12,7 @@ import type { AppDispatch } from "@/redux/store";
 import { useRouter } from "next/navigation";
 import useDebounce from "@/hooks/debounce";
 import { fetchItems } from "@/redux/features/searchedItems/searchedItemsSlice";
+import { toast } from "sonner";
 
 export default function Home() {
   const dispatch = useDispatch<AppDispatch>();
@@ -20,9 +21,9 @@ export default function Home() {
   const [endDestination, setEndDestination] = useState("");
   const [hours, setHours] = useState("");
   const [mins, setMins] = useState("");
-  const [secs, setSecs] = useState("");
+  const [secs, setSecs] = useState("00");
   const [date, setDate] = useState<Date | string>("");
-  const [people, setPeople] = useState(0);
+  const [people, setPeople] = useState(10);
   const [babies, setBabies] = useState(0);
   const [luggage, setLuggage] = useState(0);
   const [showCalendar, setShowCalendar] = useState(false);
@@ -263,14 +264,6 @@ export default function Home() {
                 onChange={(e) => setMins(e.target.value)}
                 className="border-b border-solid bg-transparent focus:outline-none border-b-label text-base text-label w-5"
               />
-              :
-              <input
-                type="text"
-                placeholder="00"
-                value={secs}
-                onChange={(e) => setSecs(e.target.value)}
-                className="border-b border-solid bg-transparent focus:outline-none border-b-label text-base text-label w-5"
-              />
             </div>
           </div>
           <div className="w-[95%] gap-4 flex justify-between items-center">
@@ -284,7 +277,7 @@ export default function Home() {
                 value={people}
                 placeholder="0"
                 onChange={(e) => setPeople(parseInt(e.target.value))}
-                className="border-none bg-transparent text-[#3c3c3c] text-base placeholder:text-base outline-none focus:outline-none w-6 text-center"
+                className="border-none bg-transparent text-[#3c3c3c] text-base placeholder:text-base outline-none focus:outline-none w-9 text-center"
               />
             </div>
             <div className="bg-[#F0F2F5] w-[75px] flex justify-center items-center gap-2 h-10 rounded-lg">
@@ -297,7 +290,7 @@ export default function Home() {
                 value={babies}
                 placeholder="0"
                 onChange={onChangeHandler(setBabies)}
-                className="border-none bg-transparent text-[#3c3c3c] text-base placeholder:text-base outline-none focus:outline-none w-6 text-center"
+                className="border-none bg-transparent text-[#3c3c3c] text-base placeholder:text-base outline-none focus:outline-none w-9 text-center"
               />
             </div>
             <div className="bg-[#F0F2F5] w-[75px] flex justify-center items-center gap-2 h-10 rounded-lg">
@@ -310,14 +303,23 @@ export default function Home() {
                 value={luggage}
                 placeholder="0"
                 onChange={onChangeHandler(setLuggage)}
-                className="border-none bg-transparent text-[#3c3c3c] text-base placeholder:text-base outline-none focus:outline-none w-6 text-center"
+                className="border-none bg-transparent text-[#3c3c3c] text-base placeholder:text-base outline-none focus:outline-none w-9 text-center"
               />
             </div>
           </div>
         </div>
         <div className="flex flex-col justify-center items-center w-full gap-5">
           <Button
-            onClick={handleFetchItems}
+            onClick={() => {
+              if (
+                parseInt(people.toString()) < 10 ||
+                parseInt(people.toString()) > 35
+              ) {
+                toast.error("Minimum 10 people at least");
+                return;
+              }
+              handleFetchItems();
+            }}
             disabled={
               date === "" ||
               mins === "" ||

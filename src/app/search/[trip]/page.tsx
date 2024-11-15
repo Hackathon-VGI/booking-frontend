@@ -26,6 +26,7 @@ const Route = () => {
             link="/search/"
             hover={false}
             tripId={selectedItem.trip_id}
+            busNumber={selectedItem.bus_number}
           />
         </div>
       </div>
