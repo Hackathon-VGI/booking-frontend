@@ -15,6 +15,7 @@ type Props = {
   duration: string;
   tripId: string;
   busNumber: string;
+  booked?: boolean;
 };
 
 const SearchItem = ({
@@ -27,6 +28,7 @@ const SearchItem = ({
   link = "/search/route",
   hover = true,
   tripId,
+  booked = false,
 }: Props) => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -52,7 +54,7 @@ const SearchItem = ({
       className="w-full"
     >
       <div
-        className={`${disabled ? "bg-[#D9D9D9] bg-opacity-10" : ""} px-5 ${
+        className={`${disabled ? "bg-black bg-opacity-10" : ""} px-5 ${
           hover
             ? "hover:bg-[#D9D9D9] hover:bg-opacity-30 transition-all cursor-pointer"
             : ""
@@ -76,9 +78,16 @@ const SearchItem = ({
           <p className="text-[#979797] font-medium text-base">
             Available Seats: {seats}
           </p>
-          <p className="text-[#979797] font-medium text-base">
-            {departureTime} - {arrivalTime}
-          </p>
+          <div className="flex justify-between items-center gap-2 w-full">
+            <p className="text-[#979797] font-medium text-base">
+              {departureTime} - {arrivalTime}
+            </p>
+            {booked && (
+              <p className="bg-[#979797] text-white rounded py-1 px-2 text-sm font-medium">
+                Booked
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </div>

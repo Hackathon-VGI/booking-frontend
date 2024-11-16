@@ -9,7 +9,7 @@ const Search = () => {
   return (
     <div className="p-5 w-full">
       <div className="bg-white rounded-[10px] pb-5  flex justify-start items-start flex-col w-full">
-        {searchedItems.map((item: TripDetails) => {
+        {searchedItems.map((item: TripDetails, idx: number) => {
           return (
             <SearchItem
               key={item.departure_time + Math.random() * 100}
@@ -18,8 +18,9 @@ const Search = () => {
               arrivalTime={item.arrival_time}
               duration={"30m"}
               link={"/search/" + item.to_stop_id}
-              disabled={false}
+              disabled={idx === 2 ? true : false}
               tripId={item.trip_id}
+              booked={idx === 2 ? true : false}
               busNumber={item.bus_number}
             />
           );
